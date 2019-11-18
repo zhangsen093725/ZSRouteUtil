@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'ZSRouteUtil_Example' do
+  pod 'ZSRouteUtil', :path => '../'
+
+  target 'ZSRouteUtil_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
