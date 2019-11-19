@@ -1,0 +1,6 @@
+framework module Pods_ZSRouteUtil_Example {
+  umbrella header "Pods-ZSRouteUtil_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

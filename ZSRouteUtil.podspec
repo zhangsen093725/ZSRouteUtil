@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZSRouteUtil'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of ZSRouteUtil.'
+  s.version          = '0.0.1'
+  s.summary          = '路由工具'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,8 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+路由工具类
+1、URL路由
                        DESC
 
   s.homepage         = 'https://github.com/zhangsen093725/ZSRouteUtil'
@@ -27,6 +28,7 @@ TODO: Add long description of the pod here.
   s.author           = { 'zhangsen093725' => '376019018@qq.com' }
   s.source           = { :git => 'https://github.com/zhangsen093725/ZSRouteUtil.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.swift_version    = '5.0'
 
   s.ios.deployment_target = '8.0'
 
