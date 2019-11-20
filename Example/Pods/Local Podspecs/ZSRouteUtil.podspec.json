@@ -1,8 +1,8 @@
 {
   "name": "ZSRouteUtil",
-  "version": "0.1.0",
-  "summary": "A short description of ZSRouteUtil.",
-  "description": "TODO: Add long description of the pod here.",
+  "version": "0.0.1",
+  "summary": "路由工具",
+  "description": "路由工具类\n1、URL路由",
   "homepage": "https://github.com/zhangsen093725/ZSRouteUtil",
   "license": {
     "type": "MIT",
@@ -13,10 +13,12 @@
   },
   "source": {
     "git": "https://github.com/zhangsen093725/ZSRouteUtil.git",
-    "tag": "0.1.0"
+    "tag": "0.0.1"
   },
+  "swift_versions": "5.0",
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "ZSRouteUtil/Classes/**/*"
+  "source_files": "ZSRouteUtil/Classes/**/*",
+  "swift_version": "5.0"
 }

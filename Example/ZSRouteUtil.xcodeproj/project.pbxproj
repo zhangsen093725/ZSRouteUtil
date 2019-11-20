@@ -43,10 +43,10 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		73EDBC84650CC5CDB73E3146 /* Pods_ZSRouteUtil_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZSRouteUtil_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A612BAF64986B7C36CA24AAF /* Pods-ZSRouteUtil_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZSRouteUtil_Tests.debug.xcconfig"; path = "Target Support Files/Pods-ZSRouteUtil_Tests/Pods-ZSRouteUtil_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		B5F026E389715AFDD860160C /* ZSRouteUtil.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = ZSRouteUtil.podspec; path = ../ZSRouteUtil.podspec; sourceTree = "<group>"; };
-		BE70E4579491ED4CF0AB3038 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		B5F026E389715AFDD860160C /* ZSRouteUtil.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ZSRouteUtil.podspec; path = ../ZSRouteUtil.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		BE70E4579491ED4CF0AB3038 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		CBA6C7B03974F4BAE556D6CA /* Pods-ZSRouteUtil_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZSRouteUtil_Example.debug.xcconfig"; path = "Target Support Files/Pods-ZSRouteUtil_Example/Pods-ZSRouteUtil_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		E1B8F90F8C9DA0689ECEBE78 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		E1B8F90F8C9DA0689ECEBE78 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +77,6 @@
 				A612BAF64986B7C36CA24AAF /* Pods-ZSRouteUtil_Tests.debug.xcconfig */,
 				3C866AF60D7955F3A4FC55DD /* Pods-ZSRouteUtil_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -227,6 +226,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
