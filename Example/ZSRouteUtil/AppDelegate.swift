@@ -17,6 +17,13 @@ class JDRoute: ZSURLRoute {
         return ["key", "hk"]
     }
     
+    static func zs_replaceRouteParamsKey() -> [String : String] {
+        
+        
+        return ["key" : "hahahahaha",
+                "hk" : "100"]
+    }
+    
     static func zs_didFinishRoute(scheme: String?, host: String?, path: String?, ignore query: String, params: [String : String]?) -> UIViewController.Type? {
         print(scheme)
         print(host)
