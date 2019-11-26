@@ -204,12 +204,12 @@ public extension ZSURLRoute {
                 
                 guard let subController = navigation.viewControllers.first else { return targetClass.init() }
                 
-                if subController.isKind(of: targetClass) {
+                if subController.isMember(of: targetClass) {
                     return subController
                 }
             }
             
-            if controller.isKind(of: targetClass) {
+            if controller.isMember(of: targetClass) {
                 return controller
             }
         }

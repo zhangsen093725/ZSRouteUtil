@@ -9,7 +9,7 @@
 import UIKit
 import ZSRouteUtil
 
-class JDRoute: ZSURLRoute {
+class JDRoute: UIViewController, ZSURLRoute {
     
     static func zs_ignoreRouteParamsKey() -> [String] {
         
@@ -31,7 +31,7 @@ class JDRoute: ZSURLRoute {
         print(query)
         print(params)
         
-        return UIViewController.self
+        return JDRoute.self
     }
     
     static func zs_didRouteFail(link: String, error: Error) {
@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        JDRoute.zs_route(to: "https://www.baidu.com/index.html#/haskl/asdajs?qiuu=woiqw&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
+        JDRoute.zs_route(to: "local://index.html#/haskl/asdajs?qiuu=woiqw&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
         
         return true
     }
