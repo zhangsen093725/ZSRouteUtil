@@ -61,7 +61,6 @@ public enum ZSURLRouteError: Error {
 
 public extension ZSURLRoute {
     
-    
     /// 路由到指定目标
     /// - Parameter link: 指定目标link
     /// - Parameter mode: 模式
@@ -72,7 +71,7 @@ public extension ZSURLRoute {
                          mode: ZSURLRouteMode = .push,
                          isCheckTabbar: Bool = true,
                          isAnimation: Bool = true,
-                         complete: (() -> Void)? = nil) {
+                         complete: (() -> Void)? = nil) -> Self.Type {
         
         do {
             let target = try zs_URLRoute(to: link, isCheckTabbar: isCheckTabbar)
@@ -80,6 +79,8 @@ public extension ZSURLRoute {
         } catch {
             zs_didRouteFail?(link: link, error: error)
         }
+        
+        return self
     }
     
     /// URL路由解析，返回可用的target controller
