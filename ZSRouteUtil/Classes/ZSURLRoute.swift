@@ -31,7 +31,9 @@ public enum ZSURLRouteError: Error {
     /// 用于重写，定义路由需要忽略的特殊参数key
     @objc optional static func zs_ignoreRouteParamsKey() -> [String]
     
-    /// 用于重写，定义需要替换 value 的参数，与 ignore 可同时使用，会替换 ignore 里面的value
+    /// 用于重写，定义需要替换 value 的参数
+    /// 与 ignore 可同时使用，会替换 ignore 里面的value
+    /// 若没有参数，会自动加上replac参数
     @objc optional static func zs_replaceRouteParamsKey() -> [String : String]
     
     /// 用于重写，定义路由规则，找到target controller
@@ -98,10 +100,11 @@ public extension ZSURLRoute {
         
         var _normalLink_ = _link_
         
+        // 需要忽略的参数query
         var query: String = ""
         var querys: [String] = []
         
-        var params: [String : String]?
+        var params: [String : String] = [:]
         
         if let index = _link_.firstIndex(of: "?") {
             // 除参数以外的link
@@ -142,6 +145,15 @@ public extension ZSURLRoute {
             
             params = _params_
             query = querys.map{ String($0) }.joined(separator: "&")
+        } else {
+            
+            // 需要替换的参数
+            if let replaces = zs_replaceRouteParamsKey?() {
+                
+                for (rekey, revalue) in replaces {
+                    params[rekey] = revalue
+                }
+            }
         }
         
         let normalLink = _normalLink_ .addingPercentEncoding(withAllowedCharacters:
