@@ -287,6 +287,8 @@ public extension ZSURLRoute {
         
         guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else { return nil }
         
+        currentController = rootViewController
+        
         if let tabBarController = rootViewController as? UITabBarController {
             
             currentController = tabBarController.selectedViewController
