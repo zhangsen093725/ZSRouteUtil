@@ -23,8 +23,10 @@ class JDRoute: UIViewController, ZSURLRoute {
         return ["key" : "hahahahaha",
                 "hk" : "100"]
     }
+
     
-    static func zs_didFinishRoute(scheme: String?, host: String?, path: String?, ignore query: String, params: [String : String]?) -> UIViewController.Type? {
+    static func zs_didFinishRoute(scheme: String?, host: String?, path: String?, ignore query: String, params: [String : String]?) -> ZSURLRoute.Type? {
+        
         print(scheme)
         print(host)
         print(path)
@@ -54,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        JDRoute.zs_route(to: "local://index.html#/haskl/asdajs?qiuu=woiqw&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
+        JDRoute.zs_go(to: "local://index.html#/haskl/asdajs?qiuu=woiqw&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
         
         return true
     }

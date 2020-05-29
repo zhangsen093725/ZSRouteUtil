@@ -47,7 +47,7 @@ public enum ZSURLRouteError: Error {
                                                  path: String?,
                                                  ignore query: String,
                                                  params: [String : String]?)
-        -> UIViewController.Type?
+        -> ZSURLRoute.Type?
     
     /// 用于重写，监听路由失败的原因
     /// - Parameter link: 失败的路由地址
@@ -63,118 +63,86 @@ public enum ZSURLRouteError: Error {
 
 public extension ZSURLRoute {
     
-    /// 路由到指定目标
-    /// - Parameter link: 指定目标link
-    /// - Parameter mode: 模式
-    /// - Parameter isCheckTabbar: 是否验证是tabbar controller
-    /// - Parameter isAnimation: 是否开启动画
-    /// - Parameter complete: 动画完成的回调，只有present有效
-    static func zs_route(to link: String,
-                         mode: ZSURLRouteMode = .push,
-                         isCheckTabbar: Bool = true,
-                         isAnimation: Bool = true,
-                         complete: (() -> Void)? = nil) -> Self.Type {
-        
-        do {
-            let target = try zs_URLRoute(to: link, isCheckTabbar: isCheckTabbar)
-            zs_route(to: target, mode: mode, isAnimation: isAnimation, complete: complete)
-        } catch {
-            zs_didRouteFail?(link: link, error: error)
-        }
-        
-        return self
-    }
-    
     /// URL路由解析，返回可用的target controller
     /// - Parameter link: 路由链接
-    /// - Parameter isCheckTabbar: 是否验证是tabbar controller
-    static func zs_URLRoute(to link: String?,
-                            isCheckTabbar: Bool = true) throws -> UIViewController {
+    @discardableResult
+    static func zs_URLRoute(from link: String?) throws -> ZSURLRoute.Type {
         
-        guard var _link_ = link else { throw ZSURLRouteError.zs_routeLinkEmpty }
+        guard let _link_ = zs_removeWhitespacesAndNewlinesLink(replace: link) else { throw ZSURLRouteError.zs_routeLinkEmpty }
         
-        _link_ = _link_.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        _link_ = _link_.replacingOccurrences(of: " ", with: "")
-        _link_ = _link_.replacingOccurrences(of: " ", with: "")
-        _link_ = _link_.replacingOccurrences(of: " ", with: "")
+        var params: [String : String] = zs_parmasFromRoute(link: _link_)
         
-        var _normalLink_ = _link_
-        
-        // 需要忽略的参数query
-        var query: String = ""
-        var querys: [String] = []
-        
-        var params: [String : String] = [:]
+        var removeQueryLink = _link_
         
         if let index = _link_.firstIndex(of: "?") {
-            // 除参数以外的link
-            _normalLink_ = String(_link_[..<index])
+            removeQueryLink = String(_link_[..<index])
+        }
+        
+        params = zs_replace(params: params)
+        
+        // 需要忽略的参数query
+        var ignoreQuery: String = ""
+        // 过滤特殊参数
+        var ignoreParams: [String : String] = [:]
+        
+        if let ignoreKeys = zs_ignoreRouteParamsKey?() {
             
-            // 参数
-            let normalQueryIndex = _link_.index(index, offsetBy: 1)
-            let normalQuery = String(_link_[normalQueryIndex..<_link_.endIndex])
-            
-            var _params_ = zs_parmasFromRoute(query: normalQuery)
-            
-            // 需要替换的参数
-            if let replaces = zs_replaceRouteParamsKey?() {
+            ignoreKeys.forEach { (key) in
                 
-                for (rekey, revalue) in replaces {
-                    _params_[rekey] = revalue
-                }
-            }
-            
-            // 过滤特殊参数
-            if let ignoreKeys = zs_ignoreRouteParamsKey?() {
-                
-                for ignoreKey in ignoreKeys {
-                    
-                    let key = ignoreKey.addingPercentEncoding(withAllowedCharacters:
-                        .urlQueryAllowed) ?? ignoreKey
-                    
-                    let val = _params_[ignoreKey]? .addingPercentEncoding(withAllowedCharacters:
-                        .urlQueryAllowed)
-                    
-                    if val != nil {
-                        querys.append("\(key)=\(val!)")
-                    }
-                    
-                    _params_[ignoreKey] = nil
-                }
-            }
-            
-            params = _params_
-            query = querys.map{ String($0) }.joined(separator: "&")
-        } else {
-            
-            // 需要替换的参数
-            if let replaces = zs_replaceRouteParamsKey?() {
-                
-                for (rekey, revalue) in replaces {
-                    params[rekey] = revalue
-                }
+                ignoreParams[key] = params[key]
+                params[key] = nil
             }
         }
         
-        let normalLink = _normalLink_ .addingPercentEncoding(withAllowedCharacters:
-            .urlQueryAllowed) ?? _normalLink_
+        ignoreQuery = ignoreParams.zs_queryURLEncodedString
+        
+        let normalLink = removeQueryLink .addingPercentEncoding(withAllowedCharacters:
+            .urlQueryAllowed) ?? removeQueryLink
         
         guard let normalURL = URL(string: normalLink) else { throw ZSURLRouteError.zs_routeLinkError }
-
-        guard let targetClass = zs_didFinishRoute?(scheme: normalURL.scheme, host: normalURL.host, path: normalURL.path.removingPercentEncoding, ignore: query, params: params) else { throw ZSURLRouteError.zs_routeTargetNotFound }
         
-        let target = zs_routeTarget(targetClass, isCheckTabbar: isCheckTabbar)
+        guard let targetClass = zs_didFinishRoute?(scheme: normalURL.scheme?.lowercased(), host: normalURL.host?.lowercased(), path: normalURL.path.removingPercentEncoding, ignore: ignoreQuery, params: params) else { throw ZSURLRouteError.zs_routeTargetNotFound }
         
-        if let _target_ = target as? ZSURLRoute {
-            _target_.zs_didRouteTargetReceive(normal: _normalLink_ + (query.isEmpty ? "" : "?\(query)"), params: params)
+        return targetClass
+    }
+    
+    static func zs_removeWhitespacesAndNewlinesLink(replace link: String?) -> String? {
+        
+        guard link != nil else { return nil }
+        
+        var _link_ = link!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        _link_ = _link_.replacingOccurrences(of: " ", with: "")
+        _link_ = _link_.replacingOccurrences(of: " ", with: "")
+        _link_ = _link_.replacingOccurrences(of: " ", with: "")
+        
+        return _link_
+    }
+    
+    static func zs_replace(params: [String : String]) -> [String : String] {
+        
+        var _params_ = params
+        
+        // 需要替换的参数
+        if let replaces = zs_replaceRouteParamsKey?() {
+            
+            replaces.forEach { (key, val) in
+                _params_[key] = val
+            }
         }
-        
-        return target
+        return _params_
     }
     
     /// 获取路由的参数
-    /// - Parameter query: URL的query
-    static func zs_parmasFromRoute(query: String) -> [String: String] {
+    /// - Parameter link: URL
+    static func zs_parmasFromRoute(link: String) -> [String: String] {
+        
+        guard let _link_ = zs_removeWhitespacesAndNewlinesLink(replace: link) else { return [:] }
+        
+        guard let index = _link_.firstIndex(of: "?") else { return [:] }
+        
+        // 参数
+        let queryIndex = _link_.index(index, offsetBy: 1)
+        let query = String(_link_[queryIndex..<_link_.endIndex])
         
         let querys = query.components(separatedBy: "&")
         
@@ -193,6 +161,51 @@ public extension ZSURLRoute {
         }
         
         return params
+    }
+}
+
+
+
+
+
+// TODO: Controller Route
+public extension ZSURLRoute {
+    
+    /// 路由到指定目标
+    /// - Parameter link: 指定目标link
+    /// - Parameter mode: 模式
+    /// - Parameter isCheckTabbar: 是否验证是tabbar controller
+    /// - Parameter isAnimation: 是否开启动画
+    /// - Parameter complete: 动画完成的回调，只有present有效
+    @discardableResult
+    static func zs_go(to link: String,
+                      mode: ZSURLRouteMode = .push,
+                      isCheckTabbar: Bool = true,
+                      isAnimation: Bool = true,
+                      complete: (() -> Void)? = nil) -> Self.Type {
+        
+        do {
+            
+            let targetClass = try zs_URLRoute(from: link)
+            
+            guard let _targetClass_ = targetClass as? UIViewController.Type else {
+                
+                let error = NSError(domain: "请使用UIViewController及其子类", code: 500, userInfo: [NSLocalizedDescriptionKey : "请使用UIViewController及其子类调用zs_go()并在zs_didFinishRoute中返回UIViewController及其子类"])
+                
+                zs_didRouteFail?(link: link, error: error)
+                
+                return self
+            }
+            
+            zs_route(to: zs_routeTarget(_targetClass_, isCheckTabbar: isCheckTabbar), mode: mode, isAnimation: isAnimation, complete: complete)
+            
+        } catch {
+            
+            zs_didRouteFail?(link: link, error: error)
+            
+        }
+        
+        return self
     }
     
     /// 获取路由指定的target controller，主要目的在于查找tabbar controller
@@ -300,5 +313,25 @@ public extension ZSURLRoute {
         
         return currentController as? UINavigationController
     }
+}
+
+
+
+fileprivate extension Dictionary {
     
+    var zs_queryURLEncodedString: String {
+        
+        var querys: [String] = []
+        
+        for (key, value) in self {
+            
+            if let val = value as? String {
+                querys.append("\(key)=\(val.addingPercentEncoding(withAllowedCharacters:.urlQueryAllowed) ?? val)")
+                continue
+            }
+            
+            querys.append("\(key)=\(value)")
+        }
+        return querys.map{ String($0) }.joined(separator: "&")
+    }
 }
