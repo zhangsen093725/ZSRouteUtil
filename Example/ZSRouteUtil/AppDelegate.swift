@@ -9,44 +9,6 @@
 import UIKit
 import ZSRouteUtil
 
-class JDRoute: UIViewController, ZSURLRoute {
-    
-    static func zs_ignoreRouteParamsKey() -> [String] {
-        
-        
-        return ["key", "hk"]
-    }
-    
-    static func zs_replaceRouteParamsKey() -> [String : String] {
-        
-        
-        return ["key" : "hahahahaha",
-                "hk" : "100"]
-    }
-
-    
-    static func zs_didFinishRoute(scheme: String?, host: String?, path: String?, ignore query: String, params: [String : String]?) -> ZSURLRoute.Type? {
-        
-        print(scheme)
-        print(host)
-        print(path)
-        print(query)
-        print(params)
-        
-        return JDRoute.self
-    }
-    
-    static func zs_didRouteFail(link: String, error: Error) {
-        print(link)
-        print(error)
-    }
-    
-    func zs_didRouteTargetReceive(normal link: String, params: [String : String]?) {
-        print(link)
-    }
-}
-
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -56,7 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        JDRoute.zs_go(to: "local://index.html#/haskl/asdajs?qiuu=woiqw&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        window?.rootViewController = UINavigationController(rootViewController: ViewController())
         
         return true
     }
