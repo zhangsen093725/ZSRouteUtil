@@ -115,19 +115,21 @@ import Foundation
         let result = ZSURLRouteResult()
         
         result.originRoute = _route_
-        result.route = normalRoute
-        
-        let scheme = normalURL.scheme ?? ""
-        result.scheme = zs_schemeMap[scheme] ?? scheme
-        
-        let host = normalURL.host ?? ""
-        result.moudle = zs_hostMap[host] ?? host
-        
-        let path = normalURL.path
-        result.submoudle = zs_pathMap[path] ?? path
-        
+        result.route = normalRoute + "?" + ignoreQuery
         result.ignoreQuery = ignoreQuery
         result.params = params
+        
+        let scheme = normalURL.scheme ?? ""
+        result.originScheme = scheme
+        result.scheme = zs_schemeMap[(zs_ignoreCase ? scheme.lowercased() : scheme)] ?? scheme
+        
+        let host = (normalURL.host) ?? ""
+        result.host = host
+        result.moudle = zs_hostMap[(zs_ignoreCase ? host.lowercased() : host)] ?? host
+        
+        let path = normalURL.path
+        result.path = path
+        result.submoudle = zs_pathMap[(zs_ignoreCase ? path.lowercased() : path)] ?? path
         
         return result
     }

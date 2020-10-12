@@ -11,6 +11,11 @@ import ZSRouteUtil
 
 class JOSHURLRoute: ZSURLRoute {
     
+    override class var zs_schemeMap: Dictionary<String, String> {
+        
+        return ["https" : "web"]
+    }
+    
     override class var zs_ignoreQueryKey: Array<String> {
         
         return ["key", "hk"]
@@ -22,8 +27,18 @@ class JOSHURLRoute: ZSURLRoute {
                 "hk" : "100"]
     }
     
+    override class var zs_ignoreCase: Bool {
+        
+        return true
+    }
+    
     override class func zs_routeTarget(result: ZSURLRouteResult) -> ZSURLRouteOutput.Type? {
         
+        if result.scheme == "web"
+        {
+            let project = Bundle.main.infoDictionary!["CFBundleExecutable"] as! String
+            return NSClassFromString(project + "." + result.moudle.capitalized + "Controller") as? ZSURLRouteOutput.Type
+        }
         
         return ViewController.self
     }
@@ -65,14 +80,14 @@ class ViewController: UIViewController, ZSURLRouteOutput {
     
     @objc func buttonAction(_ sender: UIButton) {
         
-        JOSHURLRoute.zs_push(from: "https://www.baidu.com/index.html#/haskl/asdajs?qiuu=woiqw&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
+        JOSHURLRoute.zs_push(from: "HTTPS://view/index.html#/haskl/asdajs?qiuu=woiqw&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
     }
     
     func zs_didFinishRoute(result: ZSURLRouteResult) {
         
         print("scheme: \(result.scheme)")
-        print("host: \(result.moudle)")
-        print("path: \(result.submoudle)")
+        print("moudle: \(result.moudle)")
+        print("submoudle: \(result.submoudle)")
         print("params: \(result.params)")
         
         print("route: \(result.route)")

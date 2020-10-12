@@ -39,6 +39,12 @@ import Foundation
         return []
     }
     
+    /// 是否忽略 scheme、host、path 的大小写
+    @objc open class var zs_ignoreCase: Bool {
+        
+        return false
+    }
+    
     /// 根据路由规则，找到target
     /// - Parameter result: 路由解析结果
     /// - Returns: 返回路由映射后的target
