@@ -32,7 +32,7 @@ import Foundation
             currentController = currentController?.presentedViewController!
         }
         
-        return currentController
+        return currentController ?? rootViewController
     }
     
     /// 根据类获取当前 tabbar controller 的 subcontroller
