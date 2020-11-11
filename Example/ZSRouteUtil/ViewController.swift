@@ -57,10 +57,15 @@ class JOSHURLRoute: ZSURLRoute {
         return true
     }
     
+    override class var zs_ignoreCase: Bool {
+        
+        return true
+    }
+    
     override class var zs_forward: Array<ZSURLRouteForward> {
         
         let forward: ZSURLRouteForward = ZSURLRouteForward()
-        forward.zs_host = "***.view.***"
+        forward.zs_host = "***.View.***"
         forward.zs_path = "*/*/*"
         forward.zs_forwardTarget = JOSHURLForwardRoute.self
         

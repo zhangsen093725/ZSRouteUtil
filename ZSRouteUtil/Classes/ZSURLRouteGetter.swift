@@ -212,17 +212,17 @@ import Foundation
         
         zs_forward.forEach { (forward) in
             
-            var hostRule = forward.zs_host.replacingOccurrences(of: ".", with: "[.]")
+            var hostRule = (zs_ignoreCase ? forward.zs_host.lowercased() : forward.zs_host).replacingOccurrences(of: ".", with: "[.]")
             hostRule = hostRule.replacingOccurrences(of: "*", with: ".*")
 
             var predcate: NSPredicate = NSPredicate(format: "SELF MATCHES%@", hostRule)
-            var isForward = predcate.evaluate(with: result.host)
+            var isForward = predcate.evaluate(with: (zs_ignoreCase ? result.moudle.lowercased() : result.moudle))
             
             if forward.zs_path.count > 0 && isForward
             {
-                let pathRule = forward.zs_path.replacingOccurrences(of: "*", with: ".*")
+                let pathRule = (zs_ignoreCase ? forward.zs_path.lowercased() : forward.zs_path).replacingOccurrences(of: "*", with: ".*")
                 predcate = NSPredicate(format: "SELF MATCHES%@", pathRule)
-                isForward = predcate.evaluate(with: result.path)
+                isForward = predcate.evaluate(with: (zs_ignoreCase ? result.submoudle.lowercased() : result.submoudle))
             }
             
             if isForward
