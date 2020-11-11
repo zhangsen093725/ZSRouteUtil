@@ -121,24 +121,22 @@ import Foundation
         
         let scheme = normalURL.scheme ?? ""
         result.originScheme = scheme
-        
+        result.scheme = zs_schemeMap[(zs_ignoreCase ? scheme.lowercased() : scheme)] ?? scheme
+
         zs_schemeMap.forEach { (key, value) in
             
             let schemeRule = key.replacingOccurrences(of: "*", with: ".*")
             let predcate = NSPredicate(format: "SELF MATCHES%@", schemeRule)
             
-            if predcate.evaluate(with: key)
+            if predcate.evaluate(with: scheme)
             {
                 result.scheme = value
-            }
-            else
-            {
-                result.scheme = zs_schemeMap[(zs_ignoreCase ? scheme.lowercased() : scheme)] ?? scheme
             }
         }
         
         let host = (normalURL.host) ?? ""
         result.host = host
+        result.moudle = zs_hostMap[(zs_ignoreCase ? host.lowercased() : host)] ?? host
         
         zs_hostMap.forEach { (key, value) in
             
@@ -147,31 +145,24 @@ import Foundation
             
             let predcate: NSPredicate = NSPredicate(format: "SELF MATCHES%@", hostRule)
             
-            if predcate.evaluate(with: key)
+            if predcate.evaluate(with: host)
             {
                 result.moudle = value
-            }
-            else
-            {
-                result.moudle = zs_hostMap[(zs_ignoreCase ? host.lowercased() : host)] ?? host
             }
         }
         
         let path = normalURL.path
         result.path = path
+        result.submoudle = zs_pathMap[(zs_ignoreCase ? path.lowercased() : path)] ?? path
         
         zs_pathMap.forEach { (key, value) in
             
             let pathRule = key.replacingOccurrences(of: "*", with: ".*")
             let predcate = NSPredicate(format: "SELF MATCHES%@", pathRule)
             
-            if predcate.evaluate(with: key)
+            if predcate.evaluate(with: path)
             {
                 result.submoudle = value
-            }
-            else
-            {
-                result.submoudle = zs_pathMap[(zs_ignoreCase ? path.lowercased() : path)] ?? path
             }
         }
         

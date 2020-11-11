@@ -9,7 +9,7 @@
 import UIKit
 import ZSRouteUtil
 
-class JOSHURLRouteModule: ZSURLRoute {
+class JOSHURLForwardRoute: ZSURLRoute {
     
     override class var zs_schemeMap: Dictionary<String, String> {
         
@@ -62,7 +62,7 @@ class JOSHURLRoute: ZSURLRoute {
         let forward: ZSURLRouteForward = ZSURLRouteForward()
         forward.zs_host = "***.view.***"
         forward.zs_path = "*/*/*"
-        forward.zs_forwardTarget = JOSHURLRouteModule.self
+        forward.zs_forwardTarget = JOSHURLForwardRoute.self
         
         return [forward]
     }
