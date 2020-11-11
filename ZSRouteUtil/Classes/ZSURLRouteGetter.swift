@@ -119,9 +119,9 @@ import Foundation
         result.ignoreQuery = ignoreQuery
         result.params = params
         
-        let scheme = normalURL.scheme ?? ""
-        result.originScheme = scheme
-        result.scheme = zs_schemeMap[(zs_ignoreCase ? scheme.lowercased() : scheme)] ?? scheme
+        result.originScheme = normalURL.scheme ?? ""
+        let scheme = (zs_ignoreCase ? result.originScheme.lowercased() : result.originScheme)
+        result.scheme = zs_schemeMap[scheme] ?? result.originScheme
 
         zs_schemeMap.forEach { (key, value) in
             
@@ -134,9 +134,9 @@ import Foundation
             }
         }
         
-        let host = (normalURL.host) ?? ""
-        result.host = host
-        result.moudle = zs_hostMap[(zs_ignoreCase ? host.lowercased() : host)] ?? host
+        result.host = (normalURL.host) ?? ""
+        let host = (zs_ignoreCase ? result.host.lowercased() : result.host)
+        result.moudle = zs_hostMap[host] ?? result.host
         
         zs_hostMap.forEach { (key, value) in
             
@@ -151,9 +151,9 @@ import Foundation
             }
         }
         
-        let path = normalURL.path
-        result.path = path
-        result.submoudle = zs_pathMap[(zs_ignoreCase ? path.lowercased() : path)] ?? path
+        result.path = normalURL.path
+        let path = zs_ignoreCase ? result.path.lowercased() : result.path
+        result.submoudle = zs_pathMap[result.path] ?? result.path
         
         zs_pathMap.forEach { (key, value) in
             

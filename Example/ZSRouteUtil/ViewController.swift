@@ -13,7 +13,7 @@ class JOSHURLForwardRoute: ZSURLRoute {
     
     override class var zs_schemeMap: Dictionary<String, String> {
         
-        return ["https" : "web"]
+        return ["http*" : "web"]
     }
     
     override class var zs_hostMap: Dictionary<String, String> {
