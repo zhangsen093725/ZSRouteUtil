@@ -39,6 +39,18 @@ import Foundation
         return []
     }
     
+    /// 路由转发策略表
+    @objc open class var zs_forward: Array<ZSURLRouteForward> {
+        
+        return []
+    }
+    
+    /// 是否开启路由转发策略
+    @objc open class var zs_forwardEnable: Bool {
+        
+        return false
+    }
+    
     /// 是否忽略 scheme、host、path 的大小写
     @objc open class var zs_ignoreCase: Bool {
         

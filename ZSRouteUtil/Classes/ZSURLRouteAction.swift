@@ -5,7 +5,7 @@
 //  Created by Josh on 2020/10/12.
 //
 
-import Foundation
+import UIKit
 
 @objc extension ZSURLRoute {
     

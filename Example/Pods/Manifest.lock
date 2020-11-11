@@ -1,5 +1,5 @@
 PODS:
-  - ZSRouteUtil (0.0.8)
+  - ZSRouteUtil (0.1.1)
 
 DEPENDENCIES:
   - ZSRouteUtil (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ZSRouteUtil: ba7e89a11c60fc0ba779af62cf90362e30fb45b1
+  ZSRouteUtil: 5895847b64f8ff0a2cf608af6f1bb50f922d8e11
 
 PODFILE CHECKSUM: 0fa9bf8285908125a1284e2f1e5de4453e5170bf
 

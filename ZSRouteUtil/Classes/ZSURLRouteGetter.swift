@@ -121,15 +121,59 @@ import Foundation
         
         let scheme = normalURL.scheme ?? ""
         result.originScheme = scheme
-        result.scheme = zs_schemeMap[(zs_ignoreCase ? scheme.lowercased() : scheme)] ?? scheme
+        
+        zs_schemeMap.forEach { (key, value) in
+            
+            let schemeRule = key.replacingOccurrences(of: "*", with: ".*")
+            let predcate = NSPredicate(format: "SELF MATCHES%@", schemeRule)
+            
+            if predcate.evaluate(with: key)
+            {
+                result.scheme = value
+            }
+            else
+            {
+                result.scheme = zs_schemeMap[(zs_ignoreCase ? scheme.lowercased() : scheme)] ?? scheme
+            }
+        }
         
         let host = (normalURL.host) ?? ""
         result.host = host
-        result.moudle = zs_hostMap[(zs_ignoreCase ? host.lowercased() : host)] ?? host
+        
+        zs_hostMap.forEach { (key, value) in
+            
+            var hostRule = key.replacingOccurrences(of: ".", with: "[.]")
+            hostRule = hostRule.replacingOccurrences(of: "*", with: ".*")
+            
+            let predcate: NSPredicate = NSPredicate(format: "SELF MATCHES%@", hostRule)
+            
+            if predcate.evaluate(with: key)
+            {
+                result.moudle = value
+            }
+            else
+            {
+                result.moudle = zs_hostMap[(zs_ignoreCase ? host.lowercased() : host)] ?? host
+            }
+        }
         
         let path = normalURL.path
         result.path = path
-        result.submoudle = zs_pathMap[(zs_ignoreCase ? path.lowercased() : path)] ?? path
+        
+        zs_pathMap.forEach { (key, value) in
+            
+            let pathRule = key.replacingOccurrences(of: "*", with: ".*")
+            let predcate = NSPredicate(format: "SELF MATCHES%@", pathRule)
+            
+            if predcate.evaluate(with: key)
+            {
+                result.submoudle = value
+            }
+            else
+            {
+                result.submoudle = zs_pathMap[(zs_ignoreCase ? path.lowercased() : path)] ?? path
+            }
+        }
         
         return result
     }
@@ -165,6 +209,41 @@ import Foundation
         return params
     }
     
+    /// 获取 forward target
+    /// - Parameter result: 路由解析结果
+    /// - Returns: target
+    @discardableResult
+    open class func zs_forwardTarget(from result: ZSURLRouteResult) -> ZSURLRoute.Type? {
+        
+        guard zs_forwardEnable else { return nil }
+        
+        var _forward: ZSURLRouteForward?
+        
+        zs_forward.forEach { (forward) in
+            
+            var hostRule = forward.zs_host.replacingOccurrences(of: ".", with: "[.]")
+            hostRule = hostRule.replacingOccurrences(of: "*", with: ".*")
+
+            var predcate: NSPredicate = NSPredicate(format: "SELF MATCHES%@", hostRule)
+            var isForward = predcate.evaluate(with: result.host)
+            
+            if forward.zs_path.count > 0 && isForward
+            {
+                let pathRule = forward.zs_path.replacingOccurrences(of: "*", with: ".*")
+                predcate = NSPredicate(format: "SELF MATCHES%@", pathRule)
+                isForward = predcate.evaluate(with: result.path)
+            }
+            
+            if isForward
+            {
+                _forward = forward
+                return
+            }
+        }
+        
+        return _forward?.zs_forwardTarget
+    }
+    
     /// 获取 target controller
     /// - Parameter route: 指定目标 route
     /// - Parameter isCheckTabbar: 是否验证是 tabbar controller
@@ -178,6 +257,11 @@ import Foundation
             zs_didRouteFail(route: route, error: error)
             
             return nil
+        }
+
+        if let forwardTarget = zs_forwardTarget(from: result)
+        {
+            return forwardTarget.zs_targetController(from: route, isCheckTabbar: isCheckTabbar)
         }
         
         guard let targetClass = zs_routeTarget(result: result) else

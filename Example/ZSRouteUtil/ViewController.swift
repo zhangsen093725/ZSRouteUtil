@@ -9,11 +9,16 @@
 import UIKit
 import ZSRouteUtil
 
-class JOSHURLRoute: ZSURLRoute {
+class JOSHURLRouteModule: ZSURLRoute {
     
     override class var zs_schemeMap: Dictionary<String, String> {
         
         return ["https" : "web"]
+    }
+    
+    override class var zs_hostMap: Dictionary<String, String> {
+        
+        return ["www.view.com" : "view"]
     }
     
     override class var zs_ignoreQueryKey: Array<String> {
@@ -41,6 +46,25 @@ class JOSHURLRoute: ZSURLRoute {
         }
         
         return ViewController.self
+    }
+}
+
+
+class JOSHURLRoute: ZSURLRoute {
+    
+    override class var zs_forwardEnable: Bool {
+        
+        return true
+    }
+    
+    override class var zs_forward: Array<ZSURLRouteForward> {
+        
+        let forward: ZSURLRouteForward = ZSURLRouteForward()
+        forward.zs_host = "***.view.***"
+        forward.zs_path = "*/*/*"
+        forward.zs_forwardTarget = JOSHURLRouteModule.self
+        
+        return [forward]
     }
 }
 
@@ -80,7 +104,7 @@ class ViewController: UIViewController, ZSURLRouteOutput {
     
     @objc func buttonAction(_ sender: UIButton) {
         
-        JOSHURLRoute.zs_push(from: "HTTPS://view/index.html#/haskl/asdajs?qiuu=woiqw&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
+        JOSHURLRoute.zs_push(from: "HTTPS://www.view.com/index.html#/haskl/asdajs?qiuu=https://www.baidu.com?weuu=2iwi&asdjkh=1&q=1&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
     }
     
     func zs_didFinishRoute(result: ZSURLRouteResult) {
