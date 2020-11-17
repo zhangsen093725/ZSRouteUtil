@@ -29,7 +29,11 @@ import UIKit
         
         // 需要替换的参数
         zs_replaceQuery.forEach { (key, val) in
-            _params_[key] = val
+            
+            if _params_[key] != nil
+            {
+                _params_[key] = val
+            }
         }
         return _params_
     }

@@ -71,8 +71,8 @@ import Foundation
     @discardableResult
     open class func zs_routeResolution(_ route: String?) -> ZSURLRouteResult? {
         
-        guard let _route_ = zs_removeWhitespacesAndNewlinesLink(replace: route) else
-        {
+        guard let _route_ = zs_filterWhitespaces ? zs_removeWhitespacesAndNewlinesLink(replace: route) : route else {
+         
             let error = NSError(domain: "route is empty", code: 400, userInfo: [NSLocalizedDescriptionKey : "路由地址为空"])
             zs_didRouteFail(route: route ?? "", error: error)
             return nil
@@ -173,13 +173,13 @@ import Foundation
     /// - Parameter link: URL
     open class func zs_parmasFromRoute(_ route: String) -> [String: String] {
         
-        guard let _link_ = zs_removeWhitespacesAndNewlinesLink(replace: route) else { return [:] }
+        guard let _route_ = zs_filterWhitespaces ? zs_removeWhitespacesAndNewlinesLink(replace: route) : route else { return [:] }
         
-        guard let index = _link_.firstIndex(of: "?") else { return [:] }
+        guard let index = _route_.firstIndex(of: "?") else { return [:] }
         
         // 参数
-        let queryIndex = _link_.index(index, offsetBy: 1)
-        let query = String(_link_[queryIndex..<_link_.endIndex])
+        let queryIndex = _route_.index(index, offsetBy: 1)
+        let query = String(_route_[queryIndex..<_route_.endIndex])
         
         let querys = query.components(separatedBy: "&")
         
@@ -335,7 +335,8 @@ fileprivate extension Dictionary {
         {
             if let val = value as? String
             {
-                querys.append("\(key)=\(val.addingPercentEncoding(withAllowedCharacters:.urlQueryAllowed) ?? val)")
+                let custom = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[]").inverted
+                querys.append("\(key)=\(val.addingPercentEncoding(withAllowedCharacters: custom) ?? val)")
                 continue
             }
             

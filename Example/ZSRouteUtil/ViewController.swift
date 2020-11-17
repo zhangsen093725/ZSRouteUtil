@@ -37,6 +37,11 @@ class JOSHURLForwardRoute: ZSURLRoute {
         return true
     }
     
+    override class var zs_filterWhitespaces: Bool {
+        
+        return false
+    }
+    
     override class func zs_routeTarget(result: ZSURLRouteResult) -> ZSURLRouteOutput.Type? {
         
         if result.scheme == "web"
@@ -109,7 +114,9 @@ class ViewController: UIViewController, ZSURLRouteOutput {
     
     @objc func buttonAction(_ sender: UIButton) {
         
-        JOSHURLRoute.zs_push(from: "HTTPS://www.view.com/index.html#/haskl/asdajs?qiuu=https://www.baidu.com?weuu=2iwi&asdjkh=1&q=1&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
+        guard let url = "https://www.baidu.com?weuu=2iwi&asdjkh=1&q=1".addingPercentEncoding(withAllowedCharacters: CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[]").inverted) else { return }
+        
+        JOSHURLRoute.zs_push(from: "HTTPS://www.view.com/index.html#/haskl/asdajs?qiuu=" + url  + "&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
     }
     
     func zs_didFinishRoute(result: ZSURLRouteResult) {

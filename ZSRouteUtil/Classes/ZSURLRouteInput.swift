@@ -57,6 +57,12 @@ import Foundation
         return false
     }
     
+    /// 是否过滤路由中的空格
+    @objc open class var zs_filterWhitespaces: Bool {
+        
+        return true
+    }
+    
     /// 根据路由规则，找到target
     /// - Parameter result: 路由解析结果
     /// - Returns: 返回路由映射后的target
