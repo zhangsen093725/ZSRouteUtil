@@ -70,7 +70,7 @@ class JOSHURLRoute: ZSURLRoute {
     override class var zs_forward: Array<ZSURLRouteForward> {
         
         let forward: ZSURLRouteForward = ZSURLRouteForward()
-        forward.zs_host = "***.View.***"
+        forward.zs_host = "www.***.com"
         forward.zs_path = "*/*/*"
         forward.zs_forwardTarget = JOSHURLForwardRoute.self
         
@@ -80,6 +80,20 @@ class JOSHURLRoute: ZSURLRoute {
 
 
 class ViewController: UIViewController, ZSURLRouteOutput {
+    
+    static func zs_didFinishRoute(result: ZSURLRouteResult) -> ZSURLRouteOutput {
+        
+        print("scheme: \(result.scheme)")
+        print("moudle: \(result.moudle)")
+        print("submoudle: \(result.submoudle)")
+        print("params: \(result.params)")
+        
+        print("route: \(result.route)")
+        print("ignore query: \(result.ignoreQuery)")
+        print("origin route: \(result.originRoute)")
+        
+        return self.init()
+    }
     
     lazy var button: UIButton = {
         
@@ -118,19 +132,6 @@ class ViewController: UIViewController, ZSURLRouteOutput {
         
         JOSHURLRoute.zs_push(from: "HTTPS://www.view.com/index.html#/haskl/asdajs?qiuu=" + url  + "&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
     }
-    
-    func zs_didFinishRoute(result: ZSURLRouteResult) {
-        
-        print("scheme: \(result.scheme)")
-        print("moudle: \(result.moudle)")
-        print("submoudle: \(result.submoudle)")
-        print("params: \(result.params)")
-        
-        print("route: \(result.route)")
-        print("ignore query: \(result.ignoreQuery)")
-        print("origin route: \(result.originRoute)")
-    }
-    
 }
 
 

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZSRouteUtil'
-  s.version          = '0.1.6'
+  s.version          = '0.1.7'
   s.summary          = '路由工具'
 
 # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/zhangsen093725/ZSRouteUtil'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'zhangsen093725' => '376019018@qq.com' }
+  s.author           = { 'Josh' => '376019018@qq.com' }
   s.source           = { :git => 'https://github.com/zhangsen093725/ZSRouteUtil.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
   s.swift_version    = '5.0'

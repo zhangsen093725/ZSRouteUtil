@@ -16,8 +16,6 @@ import UIKit
         
         var _link_ = link!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         _link_ = _link_.replacingOccurrences(of: " ", with: "")
-        _link_ = _link_.replacingOccurrences(of: " ", with: "")
-        _link_ = _link_.replacingOccurrences(of: " ", with: "")
         
         return _link_
     }

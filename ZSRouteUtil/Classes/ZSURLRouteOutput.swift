@@ -11,7 +11,7 @@ import Foundation
 
     /// 路由解析完成
     /// - Parameter result: 路由解析结果
-    func zs_didFinishRoute(result: ZSURLRouteResult)
+    static func zs_didFinishRoute(result: ZSURLRouteResult) -> ZSURLRouteOutput
 }
 
 

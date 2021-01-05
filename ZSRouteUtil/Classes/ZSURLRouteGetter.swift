@@ -212,6 +212,7 @@ import Foundation
         
         zs_forward.forEach { (forward) in
             
+            // 正则转换www[.].*[.]com
             var hostRule = (zs_ignoreCase ? forward.zs_host.lowercased() : forward.zs_host).replacingOccurrences(of: ".", with: "[.]")
             hostRule = hostRule.replacingOccurrences(of: "*", with: ".*")
 
@@ -220,7 +221,9 @@ import Foundation
             
             if forward.zs_path.count > 0 && isForward
             {
+                // 正则转换
                 let pathRule = (zs_ignoreCase ? forward.zs_path.lowercased() : forward.zs_path).replacingOccurrences(of: "*", with: ".*")
+                
                 predcate = NSPredicate(format: "SELF MATCHES%@", pathRule)
                 isForward = predcate.evaluate(with: (zs_ignoreCase ? result.submoudle.lowercased() : result.submoudle))
             }
@@ -265,7 +268,7 @@ import Foundation
         
         guard let _targetClass_ = targetClass as? UIViewController.Type else
         {
-            let error = NSError(domain: "target 不是 UIViewController 及其子类", code: 500, userInfo: [NSLocalizedDescriptionKey : "请在 zs_didFinishRoute 中返回 UIViewController 及其子类"])
+            let error = NSError(domain: "target 不是 UIViewController.class 及其子类", code: 500, userInfo: [NSLocalizedDescriptionKey : "请在 zs_routeTarget 中返回 UIViewController.class 及其子类"])
             
             zs_didRouteFail(route: route, error: error)
             
@@ -279,9 +282,30 @@ import Foundation
             targetController = zs_tabbarTargetController(_targetClass_)
         }
         
-        targetController = targetController == nil ? _targetClass_.init() : targetController
-        
-        (targetController as? ZSURLRouteOutput)?.zs_didFinishRoute(result: result)
+        if targetController == nil
+        {
+            guard let routeOutput = (_targetClass_ as? ZSURLRouteOutput.Type) else
+            {
+                let error = NSError(domain: "target 没有遵循 ZSURLRouteOutput 协议", code: 501, userInfo:nil)
+                
+                zs_didRouteFail(route: route, error: error)
+                
+                return nil
+            }
+            
+            let _targetController_ = routeOutput.zs_didFinishRoute(result: result)
+            
+            targetController = _targetController_ as? UIViewController
+            
+            if targetController == nil
+            {
+                let error = NSError(domain: "zs_didFinishRoute 返回错误", code: 502, userInfo: [NSLocalizedDescriptionKey : "请在 \(_targetClass_)->zs_didFinishRoute 中返回 UIViewController 及其子类"])
+                
+                zs_didRouteFail(route: route, error: error)
+                
+                return nil
+            }
+        }
         
         return targetController
     }
@@ -309,16 +333,30 @@ import Foundation
         
         guard let _targetClass_ = targetClass as? UIView.Type else
         {
-            let error = NSError(domain: "target 不是 UIView 及其子类", code: 500, userInfo: [NSLocalizedDescriptionKey : "请在 zs_didFinishRoute 中返回 UIView 及其子类"])
+            let error = NSError(domain: "target 不是 UIView.class 及其子类", code: 500, userInfo: [NSLocalizedDescriptionKey : "请在 zs_routeTarget 中返回 UIView.class 及其子类"])
             
             zs_didRouteFail(route: route, error: error)
             
             return nil
         }
         
-        let targetView = _targetClass_.init()
+        guard let routeOutput = (_targetClass_ as? ZSURLRouteOutput.Type) else
+        {
+            let error = NSError(domain: "target 没有遵循 ZSURLRouteOutput 协议", code: 501, userInfo:nil)
+            
+            zs_didRouteFail(route: route, error: error)
+            
+            return nil
+        }
         
-        (targetView as? ZSURLRouteOutput)?.zs_didFinishRoute(result: result)
+        guard let targetView = routeOutput.zs_didFinishRoute(result: result) as? UIView else
+        {
+            let error = NSError(domain: "zs_didFinishRoute 返回错误", code: 502, userInfo: [NSLocalizedDescriptionKey : "请在 \(_targetClass_)->zs_didFinishRoute 中返回 UIView 及其子类"])
+            
+            zs_didRouteFail(route: route, error: error)
+            
+            return nil
+        }
         
         return targetView
     }
