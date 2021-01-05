@@ -86,6 +86,20 @@ class JOSHURLRoute: ZSURLRoute {
 ```
 class ViewController: UIViewController, ZSURLRouteOutput {
     
+    func zs_didFinishRoute(result: ZSURLRouteResult) -> ZSURLRouteOutput {
+        
+        print("scheme: \(result.scheme)")
+        print("moudle: \(result.moudle)")
+        print("submoudle: \(result.submoudle)")
+        print("params: \(result.params)")
+        
+        print("route: \(result.route)")
+        print("ignore query: \(result.ignoreQuery)")
+        print("origin route: \(result.originRoute)")
+        
+        return self.init()
+    }
+    
     lazy var button: UIButton = {
         
         let button = UIButton(type: .system)
@@ -120,18 +134,6 @@ class ViewController: UIViewController, ZSURLRouteOutput {
     @objc func buttonAction(_ sender: UIButton) {
         
         JOSHURLRoute.zs_push(from: "HTTPS://www.view.com/index.html#/haskl/asdajs?qiuu=https://www.baidu.com?weuu=2iwi&asdjkh=1&q=1&jklasd=asjd&key = 1&askdhjajkshj&hk=88")
-    }
-    
-    func zs_didFinishRoute(result: ZSURLRouteResult) {
-        
-        print("scheme: \(result.scheme)")
-        print("moudle: \(result.moudle)")
-        print("submoudle: \(result.submoudle)")
-        print("params: \(result.params)")
-        
-        print("route: \(result.route)")
-        print("ignore query: \(result.ignoreQuery)")
-        print("origin route: \(result.originRoute)")
     }
     
 }
@@ -179,7 +181,7 @@ pod 'ZSRouteUtil'
 
 ## Author
 
-zhangsen093725, 376019018@qq.com
+Josh, 376019018@qq.com
 
 ## License
 
