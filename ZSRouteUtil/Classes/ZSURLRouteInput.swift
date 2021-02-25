@@ -40,7 +40,7 @@ import Foundation
     }
     
     /// 路由转发策略表
-    @objc open class var zs_forward: Array<ZSURLRouteForward> {
+    @objc open class var zs_forwardList: Array<ZSURLRouteForward> {
         
         return []
     }
@@ -52,22 +52,30 @@ import Foundation
     }
     
     /// 是否忽略 scheme、host、path 的大小写
-    @objc open class var zs_ignoreCase: Bool {
+    @objc open class var zs_ignoreCaseEnable: Bool {
         
         return false
     }
     
     /// 是否过滤路由中的空格
-    @objc open class var zs_filterWhitespaces: Bool {
+    @objc open class var zs_filterWhitespacesEnable: Bool {
         
         return true
     }
     
-    /// 根据路由规则，找到target
-    /// - Parameter result: 路由解析结果
-    /// - Returns: 返回路由映射后的target
-    class open func zs_routeTarget(result: ZSURLRouteResult) -> ZSURLRouteOutput.Type? {
+    /// 参数替换的映射
+    @objc open class func zs_replace(params: [String : String]) -> [String : String] {
         
-        return nil
+        var _params_ = params
+        
+        // 需要替换的参数
+        zs_replaceQuery.forEach { (key, val) in
+            
+            if _params_[key] != nil
+            {
+                _params_[key] = val
+            }
+        }
+        return _params_
     }
 }

@@ -11,13 +11,10 @@ import UIKit
     
     /// 切换选中的 tabbar controller
     /// - Parameters:
-    ///   - controller: 当前的控制器
-    ///   - isCheckTabbar: 是否开启 tabbar 切换
+    ///   - controller: 需要切换的控制器
     /// - Returns: 返回切换成功还是失败
     @discardableResult
-    open class func zs_selectTabbar(controller: UIViewController, isCheckTabbar: Bool = true) -> Bool {
-        
-        guard isCheckTabbar else { return false }
+    open class func zs_setTabbarSelectedController(_ controller: UIViewController) -> Bool {
         
         guard let tabIdx = controller.tabBarController?.viewControllers?.firstIndex(of: controller) else { return false }
         
@@ -30,41 +27,43 @@ import UIKit
     
     /// push 到指定路由
     /// - Parameters:
-    ///   - route: 路由地址
+    ///   - route: 路由
     ///   - isCheckTabbar: 是否开启 tabbar 验证
     ///   - animated: 是否开启动画
     /// - Returns: 路由地址对应的目标控制器
     @discardableResult
     open class func zs_push(from route: String, isCheckTabbar: Bool = true, animated: Bool = true) -> UIViewController? {
         
-        let controller = zs_targetController(from: route, isCheckTabbar: isCheckTabbar)
+        guard let controller = zs_targetController(from: route, isCheckTabbar: isCheckTabbar) else { return nil }
         
-        if controller == nil { return controller }
+        if isCheckTabbar
+        {
+            if zs_setTabbarSelectedController(controller) { return controller }
+        }
         
-        if zs_selectTabbar(controller: controller!, isCheckTabbar: isCheckTabbar) { return controller }
-        
-        zs_currentNavigation?.pushViewController(controller!, animated: animated)
+        zs_navigationController?.pushViewController(controller, animated: animated)
         return controller
     }
     
     /// pop 到指定路由
     /// - Parameters:
-    ///   - route: 路由地址
+    ///   - route: 路由
     ///   - isCheckTabbar: 是否开启 tabbar 验证
     ///   - animated: 是否开启动画
     /// - Returns: 路由地址对应的目标控制器
     @discardableResult
     open class func zs_pop(from route: String, isCheckTabbar: Bool = true, animated: Bool = true) -> UIViewController? {
         
-        let controller = zs_targetController(from: route, isCheckTabbar: isCheckTabbar)
+        guard let controller = zs_targetController(from: route, isCheckTabbar: isCheckTabbar) else { return nil }
         
-        if controller == nil { return controller }
-        
-        if zs_selectTabbar(controller: controller!, isCheckTabbar: isCheckTabbar) { return controller }
-        
-        if zs_currentNavigation?.navigationController?.viewControllers.contains(controller!) ?? false
+        if isCheckTabbar
         {
-            zs_currentNavigation?.popToViewController(controller!, animated: animated)
+            if zs_setTabbarSelectedController(controller) { return controller }
+        }
+        
+        if zs_navigationController?.navigationController?.viewControllers.contains(controller) ?? false
+        {
+            zs_navigationController?.popToViewController(controller, animated: animated)
         }
         
         return controller
@@ -72,7 +71,7 @@ import UIKit
     
     /// preset 到指定路由
     /// - Parameters:
-    ///   - route: 路由地址
+    ///   - route: 路由
     ///   - modalPresentationStyle: preset 的方式
     ///   - isCheckTabbar: 是否开启 tabbar 验证
     ///   - animated: 是否开启动画
@@ -85,14 +84,15 @@ import UIKit
                                animated: Bool = true,
                                completion: (() -> Void)? = nil) -> UIViewController? {
         
-        let controller = zs_targetController(from: route, isCheckTabbar: isCheckTabbar)
+        guard let controller = zs_targetController(from: route, isCheckTabbar: isCheckTabbar) else { return nil }
         
-        if controller == nil { return controller }
+        if isCheckTabbar
+        {
+            if zs_setTabbarSelectedController(controller) { return controller }
+        }
         
-        if zs_selectTabbar(controller: controller!, isCheckTabbar: isCheckTabbar) { return controller }
-        
-        controller!.modalPresentationStyle = .fullScreen
-        zs_presentedController?.present(controller!, animated: animated, completion: completion)
+        controller.modalPresentationStyle = .fullScreen
+        zs_presentedController?.present(controller, animated: animated, completion: completion)
         
         return controller
     }

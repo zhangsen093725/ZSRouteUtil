@@ -19,22 +19,6 @@ import UIKit
         
         return _link_
     }
-    
-    /// 参数替换的映射
-    class func zs_replace(params: [String : String]) -> [String : String] {
-        
-        var _params_ = params
-        
-        // 需要替换的参数
-        zs_replaceQuery.forEach { (key, val) in
-            
-            if _params_[key] != nil
-            {
-                _params_[key] = val
-            }
-        }
-        return _params_
-    }
 }
 
 

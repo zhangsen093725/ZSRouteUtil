@@ -10,10 +10,11 @@ import UIKit
 @objcMembers open class ZSURLRouteForward: NSObject {
 
     /// 泛解析域名，*为通配符
-    @objc public var zs_host: String = ""
+    @objc public var host: String = ""
     
     /// 泛解析path，*为通配符
-    @objc public var zs_path: String = ""
+    @objc public var path: String = ""
     
-    @objc public var zs_forwardTarget: ZSURLRoute.Type = ZSURLRoute.self
+    /// 转发目标类
+    @objc public var target: ZSURLRoute.Type = ZSURLRoute.self
 }

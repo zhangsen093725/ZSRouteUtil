@@ -13,10 +13,10 @@ import Foundation
     @objc public var scheme: String = ""
     
     /// 解析后的 host
-    @objc public var moudle: String = ""
+    @objc public var host: String = ""
     
     /// 解析后的 path
-    @objc public var submoudle: String = ""
+    @objc public var path: String = ""
     
     /// 解析后的 params
     @objc public var params: Dictionary<String, String> = [:]
@@ -31,10 +31,10 @@ import Foundation
     @objc public var originScheme: String = ""
     
     /// 原始的 host
-    @objc public var host: String = ""
+    @objc public var originHost: String = ""
     
     /// 原始的 path
-    @objc public var path: String = ""
+    @objc public var originPath: String = ""
     
     /// 原始的 query
     @objc public var query: String = ""

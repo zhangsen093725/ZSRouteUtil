@@ -32,22 +32,22 @@ class JOSHURLForwardRoute: ZSURLRoute {
                 "hk" : "100"]
     }
     
-    override class var zs_ignoreCase: Bool {
+    override class var zs_ignoreCaseEnable: Bool {
         
         return true
     }
     
-    override class var zs_filterWhitespaces: Bool {
+    override class var zs_filterWhitespacesEnable: Bool {
         
         return false
     }
     
-    override class func zs_routeTarget(result: ZSURLRouteResult) -> ZSURLRouteOutput.Type? {
+    override class func zs_routeTarget(from result: ZSURLRouteResult) -> ZSURLRouteOutput.Type? {
         
         if result.scheme == "web"
         {
             let project = Bundle.main.infoDictionary!["CFBundleExecutable"] as! String
-            return NSClassFromString(project + "." + result.moudle.capitalized + "Controller") as? ZSURLRouteOutput.Type
+            return NSClassFromString(project + "." + result.host.capitalized + "Controller") as? ZSURLRouteOutput.Type
         }
         
         return ViewController.self
@@ -62,17 +62,17 @@ class JOSHURLRoute: ZSURLRoute {
         return true
     }
     
-    override class var zs_ignoreCase: Bool {
+    override class var zs_ignoreCaseEnable: Bool {
         
         return true
     }
     
-    override class var zs_forward: Array<ZSURLRouteForward> {
+    override class var zs_forwardList: Array<ZSURLRouteForward> {
         
         let forward: ZSURLRouteForward = ZSURLRouteForward()
-        forward.zs_host = "www.***.com"
-        forward.zs_path = "*/*/*"
-        forward.zs_forwardTarget = JOSHURLForwardRoute.self
+        forward.host = "www.***.com"
+        forward.path = "*/*/*"
+        forward.target = JOSHURLForwardRoute.self
         
         return [forward]
     }
@@ -84,8 +84,8 @@ class ViewController: UIViewController, ZSURLRouteOutput {
     static func zs_didFinishRoute(result: ZSURLRouteResult) -> ZSURLRouteOutput {
         
         print("scheme: \(result.scheme)")
-        print("moudle: \(result.moudle)")
-        print("submoudle: \(result.submoudle)")
+        print("moudle: \(result.host)")
+        print("submoudle: \(result.path)")
         print("params: \(result.params)")
         
         print("route: \(result.route)")
