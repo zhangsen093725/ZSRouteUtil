@@ -100,7 +100,7 @@ import Foundation
             params[key] = nil
         }
         
-        ignoreQuery = ignoreParams.zs_queryURLEncodedString
+        ignoreQuery = ignoreParams.zs_queryURLEncodedStringForURLRoute
         
         let removeQueryRoute = removeQueryLink.addingPercentEncoding(withAllowedCharacters:
             .urlQueryAllowed) ?? removeQueryLink
@@ -115,7 +115,13 @@ import Foundation
         let result = ZSURLRouteResult()
         
         result.originRoute = _route_
-        result.route = removeQueryRoute + "?" + ignoreQuery
+        result.route = removeQueryRoute
+        
+        if ignoreQuery.count > 0
+        {
+            result.route = removeQueryRoute + "?" + ignoreQuery
+        }
+            
         result.ignoreQuery = ignoreQuery
         result.params = params
         
@@ -368,9 +374,9 @@ import Foundation
 }
 
 
-fileprivate extension Dictionary {
+public extension Dictionary {
     
-    var zs_queryURLEncodedString: String {
+    var zs_queryURLEncodedStringForURLRoute: String {
         
         var querys: [String] = []
         
